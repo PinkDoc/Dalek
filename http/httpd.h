@@ -86,7 +86,7 @@ public:
 
     void reset();
 
-    void Reregister();          // register connect to looper and wheel
+    void Register();          // register connect to looper and wheel
 };
 
 
@@ -320,7 +320,7 @@ void HttpConnection::reset()
 
 
 
-void HttpConnection::Reregister()
+void HttpConnection::Register()
 {
     timer_wheel_->insert(channel_, CONNECTION_TIME_OUT);
     looper_->update(channel_);
@@ -412,7 +412,7 @@ void HttpServer::accept()
         }
         else
         {
-            connections_[ret]->Reregister();
+            connections_[ret]->Register();
         }
     }
 }
