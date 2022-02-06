@@ -47,14 +47,13 @@ Requests: 322786 susceed, 0 failed.
 `httppar.h`实现了一个高性能的http解析器，可以在客户端40ms发送1byte的情况下正确的解析http请求包 ，`reactor`目录下则对事件进行了抽象，任何IO事件都封装成`Channel`，包括定时事件`TimerWheel`，服务器事件`HttpServer`，连接事件`HttpConnection`
 
 
-## 语言数量
+
 | language | files | code | comment | blank | total | comment rate |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
 | C++ | 18 | 2,374 | 262 | 703 | 3,339 | 9.94% |
 | Markdown | 1 | 82 | 0 | 17 | 99 | 0.00% |
 | Shell Script | 1 | 3 | 1 | 2 | 6 | 25.00% |
 
-## 目录代码数量
 | path | files | code | comment | blank | total | comment rate |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
 | . | 20 | 2,459 | 263 | 722 | 3,444 | 9.66% |
