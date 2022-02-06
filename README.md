@@ -46,13 +46,15 @@ Requests: 322786 susceed, 0 failed.
 `master`进程主要负责杀死`worker`进程， 当`worker`进程挂了，就会唤醒`master`进程，再`fork()`一个`worker`
 `httppar.h`实现了一个高性能的http解析器，可以在客户端40ms发送1byte的情况下正确的解析http请求包 ，`reactor`目录下则对事件进行了抽象，任何IO事件都封装成`Channel`，包括定时事件`TimerWheel`，服务器事件`HttpServer`，连接事件`HttpConnection`
 
-
+## 代码统计
+* 语言
 
 | language | files | code | comment | blank | total | comment rate |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
 | C++ | 18 | 2,374 | 262 | 703 | 3,339 | 9.94% |
 | Markdown | 1 | 82 | 0 | 17 | 99 | 0.00% |
 | Shell Script | 1 | 3 | 1 | 2 | 6 | 25.00% |
+* 目录
 
 | path | files | code | comment | blank | total | comment rate |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
