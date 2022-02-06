@@ -47,15 +47,21 @@ Requests: 322786 susceed, 0 failed.
 `httppar.h`实现了一个高性能的http解析器，可以在客户端40ms发送1byte的情况下正确的解析http请求包 ，`reactor`目录下则对事件进行了抽象，任何IO事件都封装成`Channel`，包括定时事件`TimerWheel`，服务器事件`HttpServer`，连接事件`HttpConnection`
 
 
-## 代码统计
-
+## 语言数量
 | language | files | code | comment | blank | total | comment rate |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
-| C++ | 26 | 3,337 | 305 | 950 | 4,592 | 8.37% |
-| Markdown | 4 | 36 | 0 | 10 | 46 | 0.00% |
-| Makefile | 3 | 10 | 0 | 2 | 12 | 0.00% |
-| Log | 1 | 5 | 0 | 1 | 6 | 0.00% |
-| Shell Script | 1 | 3 | 1 | 1 | 5 | 25.00% |
+| C++ | 18 | 2,374 | 262 | 703 | 3,339 | 9.94% |
+| Markdown | 1 | 82 | 0 | 17 | 99 | 0.00% |
+| Shell Script | 1 | 3 | 1 | 2 | 6 | 25.00% |
+
+## 目录代码数量
+| path | files | code | comment | blank | total | comment rate |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| . | 20 | 2,459 | 263 | 722 | 3,444 | 9.66% |
+| base | 4 | 174 | 15 | 63 | 252 | 7.94% |
+| http | 6 | 1,511 | 226 | 343 | 2,080 | 13.01% |
+| reactor | 7 | 630 | 21 | 276 | 927 | 3.23% |
+
 ## 代码树
 
 ```
