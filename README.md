@@ -1,4 +1,4 @@
-
+<a href="https://travis-ci.org/caozhiyi/CppNet"><img src="https://travis-ci.org/caozhiyi/CppNet.svg?branch=master" alt="Build Status"></a>![Build Status](https://img.shields.io/badge/language-c++-writek.svg)
 ```
                                                    
                                                    
@@ -16,14 +16,18 @@
 |   ,.'    |  ,     .-./---`-'  \   \  /'--'       
 '---'       `--`---'             `----'          
 ```
-## 搭建
+Dalek跑着我的小站：
+[Dalek](http://www.pinkdoc.cn)
+网站至今未崩塌 ：）
+## 搭建-Build
 `chmod 777 -c build.sh`
 `./build.sh`
-## 用法
+## 用法-Usage
 `./Dalek start [-p port] [-n worker_num]`
 
-## 测试
+## 测压-Test
 测试机器处理器：`i5-9300` ，系统 `Ubuntu 20.0.4`
+10K条的长连接 ，维持时间4s
 ```
 webbench -c 10000 -t 4 http://localhost:1989/
 ```
@@ -40,11 +44,11 @@ Requests: 322786 susceed, 0 failed.
 
 ```
 ## Dalek架构
-`Master/Worker`模型，端口复用，使用时间轮管理长连接 ，每个工作进程创建一个`EventLoop`和`HttpServer`，`HttpServer`负责接受连接，注册连接进入`EventLoop`和`TimerWheel`。
+`Master/Worker`模型，端口复用，使用时间轮管理长连接 ，每个工作进程（worker）创建一个`EventLoop`和`HttpServer`，内部是`reactor`模型，`HttpServer`负责接受连接，注册连接进入`EventLoop`和`TimerWheel`。
 
 ## Dalek细节
 `master`进程主要负责杀死`worker`进程， 当`worker`进程挂了，就会唤醒`master`进程，再`fork()`一个`worker`
-`httppar.h`实现了一个高性能的http解析器，可以在客户端40ms发送1byte的情况下正确的解析http请求包 ，`reactor`目录下则对事件进行了抽象，任何IO事件都封装成`Channel`，包括定时事件`TimerWheel`，服务器事件`HttpServer`，连接事件`HttpConnection`
+`httppar.h`实现了一个高性能的http解析器，可以在客户端40ms发送1byte的情况下正确的解析http请求包 ，`reactor`目录下则对事件进行了抽象，任何IO事件都封装成`Channel`，包括定时事件`TimerWheel`，服务器事件`HttpServer`，连接事件`HttpConnection`, `Poller`则是封装了`epoll`，Dalek只使用了水平模式（LT）。
 
 ## 代码统计
 * 语言
@@ -100,6 +104,6 @@ muduo
 ## TODO 
 * Json 配置服务器
 * 支持更多方法
-
+* proactor(io_uring)模型和该模式的对比
 
 
