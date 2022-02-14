@@ -1,5 +1,5 @@
-#ifndef WHEEL_H
-#define WHEEL_H
+#ifndef PINK_WHEEL_H
+#define PINK_WHEEL_H
 
 #include <unistd.h>
 #include <signal.h>
@@ -82,7 +82,7 @@ public:
     TimerWheel(EventLoop& looper):
         fd_(timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC)),
         ptr(0),
-        slots(64),
+        slots(256),
         channel_(looper, fd_),
         looper_(&looper)
     {
