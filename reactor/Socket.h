@@ -1,145 +1,102 @@
+// Socket
 #ifndef PINK_SOCKET_H
 #define PINK_SOCKET_H
 
-#include <netinet/tcp.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
-#include  "InetAddress.h"
+#include <netinet/tcp.h>
+
+#include "InetAddress.h"
 
 namespace pinkx {
 namespace net {
 
-#define MAX_LISTEN 4096     
-
+#define MAX_LISTEN 4096
 
 // Create non block socket
-static int CreateNonBlockSocket()
-{
-    int ret = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
-    return ret;
+static int CreateNonBlockSocket() {
+  int ret =
+      socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
+  return ret;
 }
-
 
 // Return old state, and set state to nonblocking
-static int SetNonBlocking(int fd)
-{
-    int old_state = fcntl(fd, F_GETFL);
-    int new_state = fcntl(fd, F_SETFL, old_state | O_NONBLOCK);
-    return old_state;
+static int SetNonBlocking(int fd) {
+  int old_state = fcntl(fd, F_GETFL);
+  int new_state = fcntl(fd, F_SETFL, old_state | O_NONBLOCK);
+  return old_state;
 }
-
-
-
 
 class Socket {
-private:
-    int fd_;
+ private:
+  int fd_;
 
-public:
+ public:
+  Socket(int fd_);
+  ~Socket();
 
-    Socket(int fd_);
-    ~Socket();
+  int fd() const;
 
-    int  fd() const;
+  void KeepAilve(bool keep);
 
-    void KeepAilve(bool keep);
+  void UseNagle(bool use);
 
-    void UseNagle(bool use);
+  void SetBindAddress(const InetAddress& address);
 
-    void SetBindAddress(const InetAddress& address);
+  void SetReuseAddr(bool resuse);
 
-    void SetReuseAddr(bool resuse);
+  void SetReusePort(bool reuse);  // mult process
 
-    void SetReusePort(bool reuse);          // mult process
-    
-    int  listen();
+  int listen();
 
-    int  accept(InetAddress& address);
+  int accept(InetAddress& address);
 
-    void SetFd(int fd);
+  void SetFd(int fd);
 };
 
+Socket::Socket(int fd) : fd_(fd) {}
 
+Socket::~Socket() { close(fd_); }
 
-Socket::Socket(int fd):
-    fd_(fd)
-{}
+int Socket::fd() const { return fd_; }
 
-
-Socket::~Socket()
-{
-    close(fd_);
+void Socket::KeepAilve(bool keep) {
+  int optval = keep ? 1 : 0;
+  ::setsockopt(fd_, IPPROTO_TCP, TCP_NODELAY, &optval,
+               static_cast<socklen_t>(sizeof optval));
 }
 
-
-int Socket::fd() const 
-{
-    return fd_;
+void Socket::SetBindAddress(const InetAddress& address) {
+  bind(fd_, address.GetAddr(), sizeof(sockaddr));
 }
 
-
-
-void Socket::KeepAilve(bool keep)
-{
-    int optval = keep ? 1 : 0;
-    ::setsockopt(fd_, IPPROTO_TCP, TCP_NODELAY,
-               &optval, static_cast<socklen_t>(sizeof optval));
+void Socket::SetReuseAddr(bool reuse) {
+  int on = reuse ? 1 : 0;
+  setsockopt(fd_, SOL_SOCKET, SO_REUSEADDR, &on, sizeof on);
 }
 
-
-
-void Socket::SetBindAddress(const InetAddress& address)
-{
-    bind(fd_, address.GetAddr(), sizeof(sockaddr));
+void Socket::SetReusePort(bool reuse) {
+  int on = reuse ? 1 : 0;
+  setsockopt(fd_, SOL_SOCKET, SO_REUSEPORT, &on, sizeof on);
 }
 
-
-
-void Socket::SetReuseAddr(bool reuse)
-{
-    int on = reuse ? 1 : 0;
-    setsockopt(fd_, SOL_SOCKET, SO_REUSEADDR, &on, sizeof on);
+int Socket::listen() {
+  int ret = ::listen(fd_, MAX_LISTEN);
+  return ret;
 }
 
-
-
-void Socket::SetReusePort(bool reuse)
-{
-    int on = reuse ? 1 : 0;
-    setsockopt(fd_, SOL_SOCKET, SO_REUSEPORT, &on, sizeof on);
-}
-
-
-
-int Socket::listen()
-{
-    int ret = ::listen(fd_, MAX_LISTEN);
-    return ret;
-}
-
-
-void Socket::UseNagle(bool use)
-{
-    
-}
-
+void Socket::UseNagle(bool use) {}
 
 // accept and set address to address
-int Socket::accept(InetAddress& address)
-{
-    socklen_t len;
-    int ret = ::accept(fd_, address.GetAddr(), &len);
-    return ret;
+int Socket::accept(InetAddress& address) {
+  socklen_t len;
+  int ret = ::accept(fd_, address.GetAddr(), &len);
+  return ret;
 }
 
+void Socket::SetFd(int fd) { fd_ = fd; }
 
-
-void Socket::SetFd(int fd)
-{
-    fd_ = fd;
-}
-
-}   // net   
-}   // pinkx
+}  // namespace net
+}  // namespace pinkx
 
 #endif
