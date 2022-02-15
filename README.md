@@ -12,7 +12,7 @@ Dalek跑着我的小站：
 
 ## 测压-Test
 测试机器处理器：`i5-9300` ，系统 `Ubuntu 20.0.4`
-10K条的长连接 ，维持时间4s
+10K条的长连接 ，维持时间4s, 4个worker
 ```
 webbench -c 10000 -t 4 http://localhost:1989/
 ```
