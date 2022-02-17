@@ -28,6 +28,7 @@ Speed=4841789 pages/min, 18630496 bytes/sec.
 Requests: 322786 susceed, 0 failed.
 
 ```
+
 ## 实现-Implement
 * 整体使用了是多进程模型，每个进程执行一个事件循环， 主进程`master`负责生成`worker`进程，用户可以设置`worker`的数量，生成出相应的数量后，`master`就会`wait`阻塞状态。如果工作进程挂了，
 就会唤醒`master`进程，`master`进程就会继续`fork`一个worker进程。同时，使用了`SO_REUSEPORT`来进行端口复用，内核做好了负载均衡 ：）。
