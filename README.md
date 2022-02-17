@@ -28,13 +28,13 @@ Speed=4841789 pages/min, 18630496 bytes/sec.
 Requests: 322786 susceed, 0 failed.
 
 ```
-## Dalek架构
-`Master/Worker`模型，端口复用，内核实现了负载均衡，使用时间轮管理长连接 ，每个工作进程（worker）创建一个`EventLoop`和`HttpServer`，内部是`reactor`模型，`HttpServer`负责接受连接，注册连接进入`EventLoop`和`TimerWheel`。
-
-## Dalek细节
-`master`进程主要负责杀死`worker`进程， 当`worker`进程挂了，就会唤醒`master`进程，再`fork()`一个`worker`
-`httppar.h`实现了一个高性能的http解析器，可以在客户端40ms发送1byte的情况下正确的解析http请求包 ，`reactor`目录下则对事件进行了抽象，任何IO事件都封装成`Channel`，包括定时事件`TimerWheel`，服务器事件`HttpServer`，连接事件`HttpConnection`, `Poller`则是封装了`epoll`，Dalek只使用了水平模式（LT）。
-
+## Dalek-实现
+* 整体使用了是多进程模型，每个进程执行一个事件循环， 主进程`master`负责生成`worker`进程，用户可以设置`worker`的数量，生成出相应的数量后，`master`就会`wait`阻塞状态。如果工作进程挂了，
+就会唤醒`master`进程，`master`进程就会继续`fork`一个worker进程。同时，使用了`SO_REUSEPORT`来进行端口复用，内核做好了负载均衡 ：）。
+* reactor模块封装了事件模型，`Channel`为基础事件，`Poller`则封装了`epoll`，可以用来执行进行回调，`Eventloop`则是`reactor`模型的核心，执行一次`epoll_wait`后返回活跃的事件，然后调用`Channel`相关的回调函数。同时 `TimerWheel`也被认为是一个事件，和`HttpConnection`, `HttpServer`一样。
+* http模块封装了一个适用于非阻塞模型的 http解析器， 可以把一个http包解析，如果包不是完整的，它会保存当前状态，等收到完整的包为止。同时`HttpConnection`和`HttpServer`都是以`Channel`为核心，执行对应的callback操作。
+* 日志库给每个进程一个缓冲区，如果缓冲区满了，就flush进日志文件（安全的）， 使用C风格， 给日志分了等级。
+* 文件的传输用的是`sendfile`，提高了性能。
 ## 代码统计
 * 语言
 
