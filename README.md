@@ -1,5 +1,5 @@
 <a href="https://travis-ci.org/caozhiyi/CppNet"><img src="https://travis-ci.org/caozhiyi/CppNet.svg?branch=master" alt="Build Status"></a>![Build Status](https://img.shields.io/badge/language-c++-writek.svg)
-![dw](tadis.jpg)
+![dw](Dalek.jpg)
 
 Dalek跑着我的小站：
 [Dalek](http://www.pinkdoc.cn)
