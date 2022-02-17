@@ -26,9 +26,7 @@ class Buffer {
   char* peek() const { return const_cast<char*>(buffer_.data()); }
   char* writeBegin() const { return peek() + endIndex_; }
   size_t size() const { return endIndex_; }
-
   size_t capacity() const { return buffer_.capacity(); }
-
   size_t writeable() { return capacity() - size(); }
 
   void reset() {
@@ -91,18 +89,6 @@ void Buffer::sprintf(char* format, ...) {
 }
 
 int Buffer::sendToFd(int fd) {
-  /*
-  if (fd == -1) return true;
-  int ret = send(fd, buffer_.data(), endIndex_, 0);
-  if (ret == 0 || ret == endIndex_)
-  {
-      endIndex_ -= ret;
-      return true;
-  } else {
-      if (ret > 0)
-          endIndex_ -= ret;
-      return false;
-  }*/
   if (fd == -1) return 1;
   int ret = send(fd, buffer_.data(), endIndex_, 0);
   if (ret > 0) endIndex_ -= ret;

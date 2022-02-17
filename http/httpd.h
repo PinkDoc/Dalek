@@ -87,7 +87,7 @@ class HttpConnection {
 
   void reset();
 
-  void Register();  // register connect to looper and wheel
+  void Register();  // Register connect to looper and wheel
 };
 
 void HttpConnection::PollIn() {

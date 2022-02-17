@@ -5,8 +5,9 @@
 #include "http/httpd.h"
 #include "reactor/EventLoop.h"
 
+// Kill workers and master
 static void Exterminate(int signo) {
-  kill(-getpid(), SIGINT);
+  kill(-getgid(), SIGINT);
   exit(1);
 }
 
@@ -14,7 +15,7 @@ static void SavePid() {
   FILE* to_save = fopen("Dalek.pid", "a+");
   if (to_save == nullptr) {
     fprintf(stderr, "Dalek.pid not exist!\n");
-    assert(false);
+    exit(1);
   }
   pid_t master_pid = getpid();
   fprintf(to_save, "%d\n", master_pid);
@@ -53,7 +54,9 @@ int main(int argc, char* argv[]) {
     }
     pid_t w = fork();
     newWorkers++;
-    if (w == 0) break;
+    if (w == 0) {
+      break;
+    }
   }
 
 worker:

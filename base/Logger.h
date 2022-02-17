@@ -2,17 +2,19 @@
 #ifndef PINK_SYNC_LOGGER_H
 #define PINK_SYNC_LOGGER_H
 
+#include <sys/file.h>
 #include <assert.h>
 #include <stdarg.h>
 #include <time.h>
 #include <unistd.h>
-
+#include <fcntl.h>
 #include <memory>
-#include <mutex>
 
 #include "noncopyable.h"
 
 namespace pinkx {
+
+
 
 class AppendFile : pinkx::noncopyable {
  private:
@@ -22,7 +24,7 @@ class AppendFile : pinkx::noncopyable {
 
   // Not thread safe
   size_t write(const char* logline, size_t len) {
-    return fwrite_unlocked(logline, 1, len, file_);
+    return fwrite(logline, 1, len, file_);
   }
 
  public:
@@ -77,7 +79,6 @@ void AppendFile::flush() { fflush(file_); }
 class SyncLogger : pinkx::noncopyable {
  private:
   static std::unique_ptr<AppendFile> file_;
-  static std::unique_ptr<std::mutex> mutex_;
 
   static void write(int level) {
     AppendFile* f = file_.get();
@@ -95,7 +96,6 @@ class SyncLogger : pinkx::noncopyable {
 
   static void append(int level, int line, const char* format, ...) {
     if (file_) {
-      std::unique_lock<std::mutex> lock(*mutex_);
       time_t t = time(nullptr);
       FILE* log = file_.get()->file();
       struct tm tm = *localtime(&t);
@@ -114,8 +114,6 @@ class SyncLogger : pinkx::noncopyable {
 };
 
 std::unique_ptr<AppendFile> SyncLogger::file_ = nullptr;
-std::unique_ptr<std::mutex> SyncLogger::mutex_ =
-    std::unique_ptr<std::mutex>(new std::mutex());
 
 char* SyncLogger::LogLevel[] = {
     "TRACE ", "DEBUG ", "INFO ", "WARN ", "ERROR ", "FATAL ",
