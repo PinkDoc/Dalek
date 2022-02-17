@@ -125,6 +125,5 @@ void Poller::remove(Channel *ch) {
 }
 
 
-
 }  // namespace pinkx
 #endif
