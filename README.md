@@ -10,7 +10,7 @@ Dalek跑着我的小站：
 ## 用法-Usage
 `./Dalek start [-p port] [-n worker_num]`
 
-## 测压-Test
+## 测压-Webbench
 测试机器处理器：`i5-9300` ，系统 `Ubuntu 20.0.4`
 10K条的长连接 ，维持时间4s, 4个worker
 ```
