@@ -29,7 +29,7 @@ Requests: 322786 susceed, 0 failed.
 
 ```
 ## Dalek架构
-`Master/Worker`模型，端口复用，使用时间轮管理长连接 ，每个工作进程（worker）创建一个`EventLoop`和`HttpServer`，内部是`reactor`模型，`HttpServer`负责接受连接，注册连接进入`EventLoop`和`TimerWheel`。
+`Master/Worker`模型，端口复用，内核实现了负载均衡，使用时间轮管理长连接 ，每个工作进程（worker）创建一个`EventLoop`和`HttpServer`，内部是`reactor`模型，`HttpServer`负责接受连接，注册连接进入`EventLoop`和`TimerWheel`。
 
 ## Dalek细节
 `master`进程主要负责杀死`worker`进程， 当`worker`进程挂了，就会唤醒`master`进程，再`fork()`一个`worker`
