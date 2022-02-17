@@ -3,7 +3,7 @@
 
 Dalek跑着我的小站：
 [Dalek](http://www.pinkdoc.cn)
-网站至今未崩塌 
+网站稳定运行中......
 ## 搭建-Build
 `chmod 777 -c build.sh`
 `./build.sh`
