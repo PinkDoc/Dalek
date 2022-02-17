@@ -1,5 +1,5 @@
 <a href="https://travis-ci.org/caozhiyi/CppNet"><img src="https://travis-ci.org/caozhiyi/CppNet.svg?branch=master" alt="Build Status"></a>![Build Status](https://img.shields.io/badge/language-c++-writek.svg)
-![dw](tadis.jpg)
+![dw](Dalek.jpg)
 
 Dalek跑着我的小站：
 [Dalek](http://www.pinkdoc.cn)
@@ -28,6 +28,8 @@ Speed=4841789 pages/min, 18630496 bytes/sec.
 Requests: 322786 susceed, 0 failed.
 
 ```
+ 其实单个`worker`就可以c10k了，由于手头没有多余的机器（仅有一台装了ubuntu的笔记本）,测试都是在同一台电脑上进行.....
+
 ## 实现-Implement
 * 整体使用了是多进程模型，每个进程执行一个事件循环， 主进程`master`负责生成`worker`进程，用户可以设置`worker`的数量，生成出相应的数量后，`master`就会`wait`阻塞状态。如果工作进程挂了，
 就会唤醒`master`进程，`master`进程就会继续`fork`一个worker进程。同时，使用了`SO_REUSEPORT`来进行端口复用，内核做好了负载均衡 ：）。
@@ -119,4 +121,6 @@ muduo
 * 支持更多方法
 * proactor(io_uring)模型和该模式的对比
 
-
+## 为什么不使用第三方库？
+* 自己造轮子才爽 ：）
+* 学习为目的
