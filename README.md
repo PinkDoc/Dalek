@@ -1,24 +1,9 @@
 <a href="https://travis-ci.org/caozhiyi/CppNet"><img src="https://travis-ci.org/caozhiyi/CppNet.svg?branch=master" alt="Build Status"></a>![Build Status](https://img.shields.io/badge/language-c++-writek.svg)
-```
-                                                   
-                                                   
-    ,---,                ,--,                 ,-.  
-  .'  .' `\            ,--.'|             ,--/ /|  
-,---.'     \           |  | :           ,--. :/ |  
-|   |  .`\  |          :  : '           :  : ' /   
-:   : |  '  | ,--.--.  |  ' |     ,---. |  '  /    
-|   ' '  ;  :/       \ '  | |    /     \'  |  :    
-'   | ;  .  .--.  .-. ||  | :   /    /  |  |   \   
-|   | :  |  '\__\/: . .'  : |__.    ' / '  : |. \  
-'   : | /  ; ," .--.; ||  | '.''   ;   /|  | ' \ \ 
-|   | '` ,/ /  /  ,.  |;  :    '   |  / '  : |--'  
-;   :  .'  ;  :   .'   |  ,   /|   :    ;  |,'     
-|   ,.'    |  ,     .-./---`-'  \   \  /'--'       
-'---'       `--`---'             `----'          
-```
+![dw](tadis.jpg)
+
 Dalek跑着我的小站：
 [Dalek](http://www.pinkdoc.cn)
-网站至今未崩塌 ：）
+网站稳定运行中......
 ## 搭建-Build
 `chmod 777 -c build.sh`
 `./build.sh`
@@ -27,7 +12,7 @@ Dalek跑着我的小站：
 
 ## 测压-Test
 测试机器处理器：`i5-9300` ，系统 `Ubuntu 20.0.4`
-10K条的长连接 ，维持时间4s
+10K条的长连接 ，维持时间4s, 4个worker
 ```
 webbench -c 10000 -t 4 http://localhost:1989/
 ```
@@ -44,7 +29,7 @@ Requests: 322786 susceed, 0 failed.
 
 ```
 ## Dalek架构
-`Master/Worker`模型，端口复用，使用时间轮管理长连接 ，每个工作进程（worker）创建一个`EventLoop`和`HttpServer`，内部是`reactor`模型，`HttpServer`负责接受连接，注册连接进入`EventLoop`和`TimerWheel`。
+`Master/Worker`模型，端口复用，内核实现了负载均衡，使用时间轮管理长连接 ，每个工作进程（worker）创建一个`EventLoop`和`HttpServer`，内部是`reactor`模型，`HttpServer`负责接受连接，注册连接进入`EventLoop`和`TimerWheel`。
 
 ## Dalek细节
 `master`进程主要负责杀死`worker`进程， 当`worker`进程挂了，就会唤醒`master`进程，再`fork()`一个`worker`
