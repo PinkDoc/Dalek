@@ -28,6 +28,7 @@ Speed=4841789 pages/min, 18630496 bytes/sec.
 Requests: 322786 susceed, 0 failed.
 
 ```
+ 其实单个`worker`就可以c10k了，由于手头没有多余的机器（仅有一台装了ubuntu的笔记本）,测试都是在同一台电脑上进行.....
 
 ## 实现-Implement
 * 整体使用了是多进程模型，每个进程执行一个事件循环， 主进程`master`负责生成`worker`进程，用户可以设置`worker`的数量，生成出相应的数量后，`master`就会`wait`阻塞状态。如果工作进程挂了，
