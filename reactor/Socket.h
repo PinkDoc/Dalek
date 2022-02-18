@@ -85,7 +85,10 @@ int Socket::listen() {
   return ret;
 }
 
-void Socket::UseNagle(bool use) {}
+void Socket::UseNagle(bool use) {
+  int on = use ? 0 : 1;
+  setsockopt(fd_, IPPROTO_TCP, TCP_NODELAY, &on, sizeof on);
+}
 
 // accept and set address to address
 int Socket::accept(InetAddress& address) {

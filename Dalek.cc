@@ -7,7 +7,7 @@
 
 // Kill workers and master
 static void Exterminate(int signo) {
-  kill(-getgid(), SIGINT);
+  kill(-getpid(), SIGINT);
   exit(1);
 }
 
