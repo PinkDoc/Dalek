@@ -1,3 +1,0 @@
-/home/pink/Ashardalon/me/Dalek/build/CMakeFiles/rebuild_cache.dir
-/home/pink/Ashardalon/me/Dalek/build/CMakeFiles/edit_cache.dir
-/home/pink/Ashardalon/me/Dalek/build/CMakeFiles/Dalek.dir
