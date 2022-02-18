@@ -19,7 +19,7 @@ namespace http {
 #define SERVER_STRING "Dalek"
 #define HTTP_VERSION "HTTP/1.1 "
 
-class HttpConnection {
+class HttpConnection : noncopyable {
  private:
   enum handle_state {
     READ_NOT_READY = 0,
@@ -77,6 +77,8 @@ class HttpConnection {
         std::bind(&HttpConnection::CloseConnection, this));
     looper_->update(channel_);
   }
+
+  ~HttpConnection() { CloseConnection(); }
 
   void PollIn();
 
@@ -276,7 +278,7 @@ void HttpConnection::Register() {
 //
 //
 //
-class HttpServer {
+class HttpServer : noncopyable {
  private:
   TimerWheel* timer_wheel_;  // Register connection to timer
   EventLoop* looper_;        // Register connection to looper
@@ -328,6 +330,11 @@ class HttpServer {
     socket_.UseNagle(false);     // Not use Nagle
     socket_.SetBindAddress(address_);
     socket_.listen();
+  }
+
+  ~HttpServer() { 
+    close(fd_); 
+    for(auto i : connections_) delete i.second;
   }
 
   void accept();
