@@ -39,32 +39,7 @@ Requests: 322786 susceed, 0 failed.
 * 文件的传输用的是`sendfile`，提高了性能。
 * 关于缓冲区`Buffer`的设计，使用vector来管理接受/发送的数据，使用一个`endIndex_`来标志buffer中数据的位置， 其中接受连接的数据比较有意思:
 在栈上开辟 65535字节大小的空间，使用`readv`来分别读取，这样可以一次读更多的数据，而且一般情况下一个`tcp缓冲区`的大小为 8K（可以设置），所以这样读效率比较高。
-```
-int Buffer::readFromFd(int fd) {
-  if (fd < 0) {
-    return -1;
-  }
 
-  size_t temp = writeable();
-
-  iovec io[2];
-  char stack_buf[65536];  // Stack
-  io[0].iov_base = writeBegin();
-  io[0].iov_len = temp;
-  io[1].iov_base = stack_buf;
-  io[1].iov_len = 65536;
-  ssize_t n = readv(fd, io, 2);
-
-  if (n > temp)  // more need toi copy
-  {
-    endIndex_ = capacity();
-    append(stack_buf, n - temp);
-  } else
-    endIndex_ += n;
-  return n;
-}
-
-```
 ## 代码统计
 * 语言
 
