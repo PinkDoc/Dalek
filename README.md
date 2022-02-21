@@ -39,7 +39,7 @@ Requests: 322786 susceed, 0 failed.
 * 文件的传输用的是`sendfile`，提高了性能。
 * 关于缓冲区`Buffer`的设计，使用vector来管理接受/发送的数据，使用一个`endIndex_`来标志buffer中数据的位置， 其中接受连接的数据比较有意思:
 在栈上开辟 65535字节大小的空间，使用`readv`来分别读取，这样可以一次读更多的数据，而且一般情况下一个`tcp缓冲区`的大小为 8K（可以设置），所以这样读效率比较高。
-
+* Json 配置服务器
 ## 代码统计
 * 语言
 
@@ -92,7 +92,6 @@ Dalek
 nginx
 muduo
 ## TODO 
-* Json 配置服务器
 * 支持更多方法
 * proactor(io_uring)模型和该模式的对比
 
