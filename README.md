@@ -32,7 +32,7 @@ Requests: 322786 susceed, 0 failed.
 
 ## 实现-Implement
 * 整体使用了是进程`master/worker`模型，每个进程执行一个事件循环， 主进程`master`负责生成`worker`进程，用户可以设置`worker`的数量，生成出相应的数量后，`master`就会`wait`阻塞状态。如果工作进程挂了，
-就会唤醒`master`进程，`master`进程就会继续`fork`一个worker进程。同时，使用了`SO_REUSEPORT`来进行端口复用，内核做好了负载均衡 ：）。
+就会唤醒`master`进程，`master`进程就会继续`fork`一个worker进程。同时，使用了`SO_REUSEPORT`来进行端口复用，内核做好了负载均衡 ：）, 避免了惊群效应。
 * reactor模块封装了事件模型，`Channel`为基础事件，`Poller`则封装了`epoll`，可以用来执行进行回调，`Eventloop`则是`reactor`模型的核心，执行一次`epoll_wait`后返回活跃的事件，然后调用`Channel`相关的回调函数。同时 `TimerWheel`也被认为是一个事件，和`HttpConnection`, `HttpServer`一样。
 * http模块封装了一个适用于非阻塞模型的 http解析器， 可以把一个http包解析，如果包不是完整的，它会保存当前状态，等收到完整的包为止。同时`HttpConnection`和`HttpServer`都是以`Channel`为核心，执行对应的callback操作。
 * 日志库给每个进程一个缓冲区，如果缓冲区满了，就flush进日志文件（安全的）， 使用C风格， 给日志分了等级。
