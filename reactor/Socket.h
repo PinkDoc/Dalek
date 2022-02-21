@@ -56,7 +56,7 @@ class Socket {
 
 Socket::Socket(int fd) : fd_(fd) {}
 
-Socket::~Socket() { close(fd_); }
+Socket::~Socket() {}
 
 int Socket::fd() const { return fd_; }
 

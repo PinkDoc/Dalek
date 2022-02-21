@@ -332,9 +332,9 @@ class HttpServer : noncopyable {
     socket_.listen();
   }
 
-  ~HttpServer() { 
-    close(fd_); 
-    for(auto i : connections_) delete i.second;
+  ~HttpServer() {
+    close(fd_);
+    for (auto i : connections_) delete i.second;
   }
 
   void accept();
