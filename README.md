@@ -8,8 +8,22 @@ Dalek跑着我的小站：
 `chmod 777 -c build.sh`
 `./build.sh`
 ## 用法-Usage
-`./Dalek start [-p port] [-n worker_num]`
+目录下需要 `conf.json`文件
+worker 是 工作进程数量，
+port 则是 工作端口
+conf.json
+```
+{
+"worker" : [number]，
+"port" : [port]
+}
+```
+只需要：
+`./Dalek`就可以使用
 
+`./Dalek --usage` 查看如何使用
+
+`./Dalek --version` 查看版本
 ## 测压-Webbench
 测试机器处理器：`i5-9300` ，系统 `Ubuntu 20.0.4`
 10K条的长连接 ，维持时间4s, 4个worker
