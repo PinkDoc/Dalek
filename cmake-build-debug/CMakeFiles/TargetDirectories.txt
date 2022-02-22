@@ -1,3 +1,0 @@
-/home/pink/Ashardalon/me/Dalek/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/pink/Ashardalon/me/Dalek/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/pink/Ashardalon/me/Dalek/cmake-build-debug/CMakeFiles/Dalek.dir
