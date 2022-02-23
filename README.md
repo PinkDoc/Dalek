@@ -15,7 +15,8 @@ conf.json
 ```
 {
 "worker" : [number]，
-"port" : [port]
+"port" : [port],
+"root" : "[root direction]"
 }
 ```
 只需要：
