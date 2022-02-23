@@ -27,8 +27,9 @@ struct Conf {
     //  assert((int)o.has<jsonxx::Number("port")>);
     worker = o.get<jsonxx::Number>("worker");
     port = o.get<jsonxx::Number>("port");
+    root = o.get<jsonxx::String>("root");
   }
-
+  std::string root;
   int worker;
   int port;
 };
@@ -99,6 +100,8 @@ int main(int argc, char* argv[]) {
   pinkx::SyncLogger::init("Dalek.log");
   jsonxx::Object o(InitConf());
   Conf conf(o);
+
+  chdir(conf.root.c_str());
 
   signal(SIGPIPE, SIG_IGN);  // Client closed
   signal(SIGINT, Exterminate);
