@@ -85,6 +85,17 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
+  // Create a guard process
+  pid_t son = fork();
+  if (son == -1) {
+    fprintf(stderr, "Dalek can't fork a child!\n");
+    exit(1);
+  }
+  if (son != 0) exit(1);
+  if (setsid() == -1) {
+    fprintf(stderr, "Dalek can't set sid!\n");
+  }
+
   pinkx::SyncLogger::init("Dalek.log");
   jsonxx::Object o(InitConf());
   Conf conf(o);
