@@ -71,10 +71,13 @@ class HttpConnection : noncopyable {
 
     channel_.SetTimeOutCallBack(
         std::bind(&HttpConnection::CloseConnection, this));
-    channel_.SetReadCallBack(std::bind(&HttpConnection::PollIn, this));
-    channel_.SetWriteCallBack(std::bind(&HttpConnection::PollOut, this));
+    channel_.SetReadCallBack(
+            std::bind(&HttpConnection::PollIn, this));
+    channel_.SetWriteCallBack(
+            std::bind(&HttpConnection::PollOut, this));
     channel_.SetErrorCallBack(
-        std::bind(&HttpConnection::CloseConnection, this));
+            std::bind(&HttpConnection::CloseConnection, this));
+
     looper_->update(channel_);
   }
 
@@ -130,7 +133,8 @@ void HttpConnection::HandleResponse() {
 
     file_fd_ = open(uri.path.c_str(), O_NONBLOCK | O_RDONLY);
 
-    if (file_fd_ == -1) {
+    if (file_fd_ == -1)
+    {
       if (uri.path == "index.html")
         BuildError(FORBIDDEN);
       else
@@ -140,10 +144,37 @@ void HttpConnection::HandleResponse() {
       request_.rescode_ = OK;
     }
 
-  } else if (method == HTTP_POST) {
+  }
+  else if (method == HTTP_POST)
+  {
     request_.cgi = true;
     request_.rescode_ = OK;
-  } else {
+  }
+  else if (method == HTTP_HEAD)
+  {
+      HttpURI& uri = request_.uri_;
+
+      if (uri.path == "/" || uri.path == "") uri.path = "index.html";
+
+      int ret = stat(uri.path.c_str(), &request_.fileStat_);
+
+      if (ret == -1) {
+          if (uri.path == "index.html")
+              BuildError(FORBIDDEN);
+          else
+              BuildError(NOT_FOUND);
+          return;
+      } else {
+          request_.rescode_ = OK;
+      }
+  }
+  else if (method == HTTP_TRACE)
+  {
+      request_.rescode_ = OK;
+      request_.fileStat_.st_size = sizeof(readBuffer_.size());
+  }
+  else
+  {
     BuildError(NOT_IMPLEMENT);
     return;
   }
@@ -168,6 +199,11 @@ void HttpConnection::HandleResponse() {
   writeBuffer_.sprintf("Content-Type: %s" CRLF, GetMime().data());
   writeBuffer_.sprintf("Content-Length: %d" CRLF, request_.fileStat_.st_size);
   writeBuffer_.sprintf(CRLF);
+
+  if (request_.method_ == HTTP_TRACE)
+  {
+      writeBuffer_.sprintf(readBuffer_.peek());
+  }
 
   channel_.DisableRead();
   channel_.EnableWrite();
@@ -228,6 +264,7 @@ void HttpConnection::CloseConnection() {
 }
 
 void HttpConnection::SendFile() {
+  if (file_fd_ == -1) return;
   int ret = 0;
   while (true) {
     int ret = sendfile(fd_, file_fd_, nullptr, 1);

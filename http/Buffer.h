@@ -23,6 +23,8 @@ class Buffer {
  public:
   Buffer();
 
+  void operator= (Buffer && buffer) { buffer_ = std::move(buffer.buffer_); }
+
   char* peek() const { return const_cast<char*>(buffer_.data()); }
   char* writeBegin() const { return peek() + endIndex_; }
   size_t size() const { return endIndex_; }
