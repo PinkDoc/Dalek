@@ -73,33 +73,6 @@ Requests: 322786 susceed, 0 failed.
 
 ## 代码树
 
-```
-Dalek
-├─ CMakeLists.txt
-├─ Dalek.cc
-├─ README.md
-├─ base
-│  ├─ Logger.h
-│  ├─ copyable.h
-│  ├─ noncopyable.h
-│  └─ swap.h
-├─ build
-├─ build.sh
-├─ http
-│  ├─ Buffer.h
-│  ├─ base.h
-│  ├─ httpd.h
-│  ├─ httppar.h
-│  ├─ httpres.h
-│  └─ mime.h
-└─ reactor
-   ├─ Channel.h
-   ├─ EventLoop.h
-   ├─ InetAddress.h
-   ├─ Poller.h
-   ├─ Socket.h
-   ├─ TimerWheel.h
-   └─ base.h
 
 ```
 ## 参考
@@ -118,48 +91,11 @@ Dalek
 ├─ Dalek.jpg
 ├─ README.md
 ├─ base
-│  ├─ Logger.h
 │  ├─ Logger.hpp
-│  ├─ copyable.h
+│  ├─ Logger.hpp
 │  ├─ copyable.hpp
-│  ├─ noncopyable.h
+│  ├─ copyable.hpp
 │  ├─ noncopyable.hpp
-│  ├─ swap.h
-│  └─ swap.hpp
-├─ build.sh
-├─ http
-│  ├─ base.hpp
-│  ├─ buffer.hpp
-│  ├─ httpd.hpp
-│  ├─ httppar.hpp
-│  ├─ httpres.hpp
-│  └─ mime.hpp
-├─ pson
-│  ├─ Parser.hpp
-│  └─ Value.hpp
-├─ reactor
-│  ├─ Channel.hpp
-│  ├─ EventLoop.hpp
-│  ├─ InetAddress.hpp
-│  ├─ Poller.hpp
-│  ├─ Socket.hpp
-│  ├─ TimerWheel.hpp
-│  └─ base.hpp
-└─ tadis.jpg
-
-```
-```
-Dalek
-├─ CMakeLists.txt
-├─ Dalek.cc
-├─ Dalek.jpg
-├─ README.md
-├─ base
-│  ├─ Logger.h
-│  ├─ Logger.hpp
-│  ├─ copyable.h
-│  ├─ copyable.hpp
-│  ├─ noncopyable.h
 │  ├─ noncopyable.hpp
 │  ├─ swap.h
 │  └─ swap.hpp
