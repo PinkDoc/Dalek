@@ -1,5 +1,5 @@
-#ifndef PINK_NONCOPY_HPP
-#define PINK_NONCOPY_HPP
+#ifndef PINK_NONCOPY_H
+#define PINK_NONCOPY_H
 
 namespace pinkx {
 

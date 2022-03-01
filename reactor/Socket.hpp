@@ -1,12 +1,12 @@
 // Socket
-#ifndef PINK_SOCKET_H
-#define PINK_SOCKET_H
+#ifndef PINK_SOCKET_HPP
+#define PINK_SOCKET_HPP
 
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <netinet/tcp.h>
 
-#include "InetAddress.h"
+#include "InetAddress.hpp"
 
 namespace pinkx {
 namespace net {

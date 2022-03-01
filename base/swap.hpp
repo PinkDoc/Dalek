@@ -1,5 +1,5 @@
-#ifndef PINK_SWAP_HPP
-#define PINK_SWAP_HPP
+#ifndef PINK_SWAP_H
+#define PINK_SWAP_H
 
 namespace pinkx {
     

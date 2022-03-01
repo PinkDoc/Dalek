@@ -1,6 +1,6 @@
 // buffer
-#ifndef PINK_NBUFFER_H
-#define PINK_NBUFFER_H
+#ifndef PINK_BUFFER_HPP
+#define PINK_BUFFER_HPP
 
 #include <stdarg.h>
 #include <stdio.h>

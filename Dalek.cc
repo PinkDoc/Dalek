@@ -2,9 +2,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "base/jsonxx.h"
-#include "http/httpd.h"
-#include "reactor/EventLoop.h"
+#include "pson/Parser.hpp"
+#include "http/httpd.hpp"
+#include "reactor/EventLoop.hpp"
 
 void usage() {
   printf(
@@ -22,12 +22,10 @@ void version() {
 }
 
 struct Conf {
-  explicit Conf(const jsonxx::Object& o) {
-    // assert((int)o.has<jsonxx::Number>("worker"));
-    //  assert((int)o.has<jsonxx::Number("port")>);
-    worker = o.get<jsonxx::Number>("worker");
-    port = o.get<jsonxx::Number>("port");
-    root = o.get<jsonxx::String>("root");
+  Conf(pson::Object& o) {
+    worker = o.GetAsNumber("worker");
+    port = o.GetAsNumber("port");
+    root = o.GetAsString("root");
   }
   std::string root;
   int worker;
@@ -51,23 +49,28 @@ static void SavePid() {
   fclose(to_save);
 }
 
-jsonxx::Object InitConf() {
-  char buffer[1024];
+pson::Value* InitConf() {
+  char buffer[65535];
+  bzero(buffer, 65535);
+
   FILE* file = fopen("conf.json", "r");
+
   if (!file) {
     fprintf(stderr, "Dalek: Dalek can't find conf.json\n");
     fprintf(stderr, "Dalek: use ./Dalek --usage");
     exit(1);
   }
+
   struct stat file_stat;
   stat("conf.json", &file_stat);
-  int ret = fread(static_cast<void*>(buffer), 1024, file_stat.st_size, file);
+  int ret = fread(static_cast<void*>(buffer), 65535, file_stat.st_size, file);
   if (ret < 0) {
     fprintf(stderr, "Dalek: Dalek can't read from conf.json\n");
   }
-  std::string buf(buffer);
-  jsonxx::Object obj;
-  obj.parse(buf);
+
+  pson::Value* obj = new pson::Value();
+  pson::Parser parser(buffer, file_stat.st_size);
+  bool parseOk = parser.Parse(*obj);
   return obj;
 }
 
@@ -98,10 +101,9 @@ int main(int argc, char* argv[]) {
   }
 
   pinkx::SyncLogger::init("Dalek.log");
-  jsonxx::Object o(InitConf());
+  std::unique_ptr<pson::Value> val(InitConf());
+  pson::Object o(val->AsObject());
   Conf conf(o);
-
-  chdir(conf.root.c_str());
 
   signal(SIGPIPE, SIG_IGN);  // Client closed
   signal(SIGINT, Exterminate);
@@ -112,7 +114,8 @@ int main(int argc, char* argv[]) {
   SavePid();
 
   int newWorkers = 0;
-
+  chdir(conf.root.c_str());
+  
   while (true) {
     if (newWorkers == numberOfWorker) {
       int n;

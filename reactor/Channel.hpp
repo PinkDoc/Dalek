@@ -1,13 +1,13 @@
 // channel
-#ifndef PINK_CHANNEL_H
-#define PINK_CHANNEL_H
+#ifndef PINK_CHANNEL_HPP
+#define PINK_CHANNEL_HPP
 
 #include <sys/epoll.h>
 
 #include <functional>
 
-#include "EventLoop.h"
-#include "base.h"
+#include "EventLoop.hpp"
+#include "base.hpp"
 
 namespace pinkx {
 

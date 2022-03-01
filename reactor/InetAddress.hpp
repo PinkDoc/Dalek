@@ -1,6 +1,6 @@
 // InetAddress
-#ifndef PINK_INET_ADDRESS_H
-#define PINK_INET_ADDRESS_H
+#ifndef PINK_INET_ADDRESS_HPP
+#define PINK_INET_ADDRESS_HPP
 
 #include <arpa/inet.h>
 #include <assert.h>

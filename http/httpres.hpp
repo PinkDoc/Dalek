@@ -8,9 +8,9 @@
 
 #include <string_view>
 
-#include "Buffer.h"
-#include "httppar.h"
-#include "mime.h"
+#include "buffer.hpp"
+#include "httppar.hpp"
+#include "mime.hpp"
 //
 //
 //

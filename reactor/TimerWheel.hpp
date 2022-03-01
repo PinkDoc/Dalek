@@ -1,6 +1,6 @@
 // Timer Wheel
-#ifndef PINK_WHEEL_H
-#define PINK_WHEEL_H
+#ifndef PINK_WHEEL_HPP
+#define PINK_WHEEL_HPP
 
 #include <signal.h>
 #include <string.h>
@@ -14,8 +14,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Channel.h"
-#include "EventLoop.h"
+#include "Channel.hpp"
+#include "EventLoop.hpp"
 
 namespace pinkx {
 

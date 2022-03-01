@@ -59,17 +59,17 @@ Requests: 322786 susceed, 0 failed.
 
 | language | files | code | comment | blank | total | comment rate |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
-| C++ | 18 | 2,374 | 262 | 703 | 3,339 | 9.94% |
-| Markdown | 1 | 82 | 0 | 17 | 99 | 0.00% |
+| C++ | 24 | 2,790 | 169 | 710 | 3,669 | 5.71% |
+| Markdown | 1 | 99 | 0 | 14 | 113 | 0.00% |
 | Shell Script | 1 | 3 | 1 | 2 | 6 | 25.00% |
-* 目录
 
 | path | files | code | comment | blank | total | comment rate |
 | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
-| . | 20 | 2,459 | 263 | 722 | 3,444 | 9.66% |
-| base | 4 | 174 | 15 | 63 | 252 | 7.94% |
-| http | 6 | 1,511 | 226 | 343 | 2,080 | 13.01% |
-| reactor | 7 | 630 | 21 | 276 | 927 | 3.23% |
+| . | 26 | 2,892 | 170 | 726 | 3,788 | 5.55% |
+| base | 8 | 270 | 32 | 92 | 394 | 10.60% |
+| http | 6 | 1,299 | 85 | 273 | 1,657 | 6.14% |
+| pson | 2 | 622 | 21 | 158 | 801 | 3.27% |
+| reactor | 7 | 488 | 28 | 160 | 676 | 5.43% |
 
 ## 代码树
 
@@ -110,3 +110,78 @@ muduo
 * proactor(io_uring)模型和该模式的对比
 * 一些细节
 
+
+```
+Dalek
+├─ CMakeLists.txt
+├─ Dalek.cc
+├─ Dalek.jpg
+├─ README.md
+├─ base
+│  ├─ Logger.h
+│  ├─ Logger.hpp
+│  ├─ copyable.h
+│  ├─ copyable.hpp
+│  ├─ noncopyable.h
+│  ├─ noncopyable.hpp
+│  ├─ swap.h
+│  └─ swap.hpp
+├─ build.sh
+├─ http
+│  ├─ base.hpp
+│  ├─ buffer.hpp
+│  ├─ httpd.hpp
+│  ├─ httppar.hpp
+│  ├─ httpres.hpp
+│  └─ mime.hpp
+├─ pson
+│  ├─ Parser.hpp
+│  └─ Value.hpp
+├─ reactor
+│  ├─ Channel.hpp
+│  ├─ EventLoop.hpp
+│  ├─ InetAddress.hpp
+│  ├─ Poller.hpp
+│  ├─ Socket.hpp
+│  ├─ TimerWheel.hpp
+│  └─ base.hpp
+└─ tadis.jpg
+
+```
+```
+Dalek
+├─ CMakeLists.txt
+├─ Dalek.cc
+├─ Dalek.jpg
+├─ README.md
+├─ base
+│  ├─ Logger.h
+│  ├─ Logger.hpp
+│  ├─ copyable.h
+│  ├─ copyable.hpp
+│  ├─ noncopyable.h
+│  ├─ noncopyable.hpp
+│  ├─ swap.h
+│  └─ swap.hpp
+├─ build.sh
+├─ http
+│  ├─ base.hpp
+│  ├─ buffer.hpp
+│  ├─ httpd.hpp
+│  ├─ httppar.hpp
+│  ├─ httpres.hpp
+│  └─ mime.hpp
+├─ pson
+│  ├─ Parser.hpp
+│  └─ Value.hpp
+├─ reactor
+│  ├─ Channel.hpp
+│  ├─ EventLoop.hpp
+│  ├─ InetAddress.hpp
+│  ├─ Poller.hpp
+│  ├─ Socket.hpp
+│  ├─ TimerWheel.hpp
+│  └─ base.hpp
+└─ tadis.jpg
+
+```

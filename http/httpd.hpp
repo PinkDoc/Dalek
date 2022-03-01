@@ -4,10 +4,10 @@
 
 #include <unordered_map>
 
-#include "Buffer.h"
-#include "base.h"
-#include "httppar.h"
-#include "httpres.h"
+#include "buffer.hpp"
+#include "base.hpp"
+#include "httppar.hpp"
+#include "httpres.hpp"
 
 namespace pinkx {
 namespace http {

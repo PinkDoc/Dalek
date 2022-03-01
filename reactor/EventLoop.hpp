@@ -1,13 +1,13 @@
 // EventLoop
-#ifndef PINK_EVENT_LOOP_H
-#define PINK_EVENT_LOOP_H
+#ifndef PINK_EVENT_LOOP_HPP
+#define PINK_EVENT_LOOP_HPP
 
 #include <unistd.h>
 
 #include <vector>
 
-#include "Channel.h"
-#include "Poller.h"
+#include "Channel.hpp"
+#include "Poller.hpp"
 
 namespace pinkx {
 

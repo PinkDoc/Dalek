@@ -1,6 +1,6 @@
 // Logger
-#ifndef PINK_SYNC_LOGGER_HPP
-#define PINK_SYNC_LOGGER_HPP
+#ifndef PINK_SYNC_LOGGER_H
+#define PINK_SYNC_LOGGER_H
 
 #include <sys/file.h>
 #include <assert.h>
@@ -10,7 +10,7 @@
 #include <fcntl.h>
 #include <memory>
 
-#include "noncopyable.h"
+#include "noncopyable.hpp"
 
 namespace pinkx {
 

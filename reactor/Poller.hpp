@@ -1,6 +1,6 @@
 // Poller
-#ifndef PINK_POLL_H
-#define PINK_POLL_H
+#ifndef PINK_POLL_HPP
+#define PINK_POLL_HPP
 
 #include <assert.h>
 #include <string.h>
@@ -8,8 +8,8 @@
 
 #include <unordered_map>
 
-#include "EventLoop.h"
-#include "base.h"
+#include "EventLoop.hpp"
+#include "base.hpp"
 
 namespace pinkx {
 
