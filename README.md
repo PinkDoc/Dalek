@@ -80,12 +80,8 @@ Dalek
 ├─ README.md
 ├─ base
 │  ├─ Logger.hpp
-│  ├─ Logger.hpp
-│  ├─ copyable.hpp
 │  ├─ copyable.hpp
 │  ├─ noncopyable.hpp
-│  ├─ noncopyable.hpp
-│  ├─ swap.h
 │  └─ swap.hpp
 ├─ build.sh
 ├─ http
