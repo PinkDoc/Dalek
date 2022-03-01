@@ -72,18 +72,6 @@ Requests: 322786 susceed, 0 failed.
 | reactor | 7 | 488 | 28 | 160 | 676 | 5.43% |
 
 ## 代码树
-
-
-```
-## 参考
-nginx
-muduo
-## TODO 
-* 支持更多方法
-* proactor(io_uring)模型和该模式的对比
-* 一些细节
-
-
 ```
 Dalek
 ├─ CMakeLists.txt
@@ -121,3 +109,14 @@ Dalek
 └─ tadis.jpg
 
 ```
+
+## 参考
+nginx
+muduo
+## TODO 
+* 支持更多方法
+* proactor(io_uring)模型和该模式的对比
+* 一些细节
+
+
+
