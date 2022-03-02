@@ -6,14 +6,6 @@
 #include "http/httpd.hpp"
 #include "reactor/EventLoop.hpp"
 
-void usage() {
-  printf(
-      "Before you start! You should move Dalek to root floder, and create a "
-      "conf.json!\n");
-  printf("conf.json should is just like: \"worker : [number] \" \n");
-  printf("and the port of Dalek: \"port: [port]\" \n");
-  printf("./Dalek");
-}
 
 void version() {
   printf("Dalek version: 1.0.0\n");
@@ -77,10 +69,6 @@ pson::Value* InitConf() {
 int main(int argc, char* argv[]) {
   if (argc > 1) {
     std::string_view arg(argv[1]);
-
-    if (arg == "--usage") {
-      usage();
-    }
 
     if (arg == "--version") {
       version();
