@@ -212,7 +212,7 @@ void HttpConnection::HandleResponse() {
 
 void HttpConnection::BuildError(rescode code) {
   writeBuffer_.sprintf(HTTP_VERSION);
-  writeBuffer_.sprintf(const_cast<char*>(resMap[request_.rescode_].data()));
+  writeBuffer_.sprintf(const_cast<char*>(resMap[code].data()));
   writeBuffer_.sprintf(CRLF);
   writeBuffer_.sprintf("Server: ");
   writeBuffer_.sprintf(SERVER_STRING CRLF);
