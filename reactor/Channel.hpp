@@ -91,9 +91,7 @@ void Channel::SetWriteCallBack(std::function<void()> cb) { writeCallBack = cb; }
 
 void Channel::SetErrorCallBack(std::function<void()> cb) { errorCallBack = cb; }
 
-void Channel::SetTimeOutCallBack(std::function<void()> cb) {
-  timeOutCallBack = cb;
-}
+void Channel::SetTimeOutCallBack(std::function<void()> cb) { timeOutCallBack = cb; }
 
 void Channel::EnableRead() { event_ |= (EPOLLIN); }
 
