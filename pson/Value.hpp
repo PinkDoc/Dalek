@@ -2,8 +2,8 @@
 // Created by pink on 2022/2/26.
 //
 
-#ifndef PINK_PSON_VALUE_HPP
-#define PINK_PSON_VALUE_HPP
+#ifndef PNET_PSON_VALUE_HPP
+#define PNET_PSON_VALUE_HPP
 
 #include <string.h>
 #include <assert.h>
@@ -94,6 +94,7 @@ namespace pson {
         inline String& GetAsString(size_t i);
         inline Array& GetAsArray(size_t i);
         inline Object& GetAsObject(size_t i);
+
     };
 
 
@@ -422,6 +423,6 @@ namespace pson {
         return GetValue(name).AsObject();
     }
 
-
+#undef CAST
 } // namespace pson
 #endif
