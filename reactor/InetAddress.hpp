@@ -38,7 +38,7 @@ class InetAddress {
   static bool resolve(const char* hostName, InetAddress* result);
 };
 
-InetAddress::InetAddress(uint16_t port, bool lookBack) {
+inline InetAddress::InetAddress(uint16_t port, bool lookBack) {
   memset(&addr4_, 0, sizeof(addr4_));
   addr4_.sin_family = AF_INET;
 
@@ -48,7 +48,7 @@ InetAddress::InetAddress(uint16_t port, bool lookBack) {
   addr4_.sin_addr.s_addr = htonl(ip);
 }
 
-InetAddress::InetAddress(char* ip, uint16_t port) {
+inline InetAddress::InetAddress(char* ip, uint16_t port) {
   memset(&addr4_, 0, sizeof(addr4_));
 
   addr4_.sin_family = AF_INET;
@@ -60,7 +60,7 @@ InetAddress::InetAddress(char* ip, uint16_t port) {
 }
 
 // Return IP "a.b.c.d"
-std::string InetAddress::to_ip() const {
+inline std::string InetAddress::to_ip() const {
   char buffer[64];
   if (inet_ntop(AF_INET, &addr4_.sin_addr, buffer,
                 static_cast<socklen_t>(sizeof(addr4_))) < 0) {
@@ -70,18 +70,18 @@ std::string InetAddress::to_ip() const {
 }
 
 // TODO
-std::string InetAddress::to_IpPort() const {
+inline std::string InetAddress::to_IpPort() const {
   char buffer[128];
   // ERROR
   return buffer;
 }
 
 // Get port
-uint16_t InetAddress::port() const {
+inline uint16_t InetAddress::port() const {
   return static_cast<uint16_t>(addr4_.sin_port);
 }
 
-bool InetAddress::resolve(const char* hostName, InetAddress* result) {
+inline bool InetAddress::resolve(const char* hostName, InetAddress* result) {
   char buffer[64];
   assert(result != nullptr);
   struct hostent hent;
