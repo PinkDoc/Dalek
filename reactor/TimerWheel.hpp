@@ -24,18 +24,18 @@ class Slot {
   std::vector<Channel*> connections_;
 
  public:
-  void tick() {
+  inline void tick() {
     for (auto& i : connections_)
       if (i) i->TimeOutCallBack();
     connections_.clear();
   }
 
-  int insert(Channel& connection) {
+  inline int insert(Channel& connection) {
     connections_.push_back(&connection);
     return connections_.size() - 1;
   }
 
-  void del(int p) { connections_[p] = nullptr; }
+  inline void del(int p) { connections_[p] = nullptr; }
 };
 
 class TimerWheel {
@@ -50,14 +50,14 @@ class TimerWheel {
 
   size_t ptr;
 
-  void create(Channel& connect, int timeOut) {
+  inline void create(Channel& connect, int timeOut) {
     int slotsLen = slots.size();
     int p = (ptr + timeOut) % slotsLen;
     int slotP = slots[p].insert(connect);
     marker.insert({&connect, {(slots.data() + p), slotP}});
   }
 
-  void change(Channel& connect, int timeOut) {
+  inline void change(Channel& connect, int timeOut) {
     Slot* slot = marker[&connect].first;
     int p = marker[&connect].second;
     slot->del(p);
@@ -69,7 +69,7 @@ class TimerWheel {
   }
 
  public:
-  TimerWheel(EventLoop& looper)
+  inline TimerWheel(EventLoop& looper)
       : fd_(timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC)),
         ptr(0),
         slots(256),
@@ -85,7 +85,7 @@ class TimerWheel {
     looper_->update(channel_);
   }
 
-  TimerWheel(EventLoop& looper, size_t len)
+  inline TimerWheel(EventLoop& looper, size_t len)
       : fd_(timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC)),
         ptr(0),
         slots(len),
@@ -102,10 +102,10 @@ class TimerWheel {
     looper_->update(channel_);
   }
 
-  ~TimerWheel() { close(fd_); }
+  inline ~TimerWheel() { close(fd_); }
 
   // If active time
-  void tick() {
+  inline void tick() {
     slots[ptr].tick();
     ptr = (ptr + 1) % slots.size();
 
@@ -115,7 +115,7 @@ class TimerWheel {
   }
 
   // insert a new timer or change old timer
-  void insert(Channel& connect, int timeOut) {
+  inline void insert(Channel& connect, int timeOut) {
     if (marker.find(&connect) == marker.end()) {
       create(connect, timeOut);
     } else {
@@ -124,7 +124,7 @@ class TimerWheel {
   }
 
   // delete timer
-  void del(Channel& connect) {
+  inline void del(Channel& connect) {
     if (marker.find(&connect) != marker.end()) {
       Slot* s = marker[&connect].first;
       int p = marker[&connect].second;
