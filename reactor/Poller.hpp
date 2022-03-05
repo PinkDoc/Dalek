@@ -39,7 +39,7 @@ class Poller : noncopyable {
   void remove(Channel *ch);
 };
 
-Poller::Poller(EventLoop *looper)
+inline Poller::Poller(EventLoop *looper)
     : looper_(looper), epollFd_(::epoll_create1(EPOLL_CLOEXEC)) {
   if (epollFd_ == -1) {
     P_LOG_ERROR("Poller::Poller()");
@@ -49,12 +49,12 @@ Poller::Poller(EventLoop *looper)
   P_LOG_TRACE("Poller::Poller()");
 }
 
-Poller::~Poller() {
+inline Poller::~Poller() {
   P_LOG_TRACE("Poller::~Poller()");
   close(epollFd_);
 }
 
-void Poller::update(Channel *ch) {
+inline void Poller::update(Channel *ch) {
   int fd = ch->fd();
   if (ch->happended() == Channel::IsNew ||
       ch->happended() == Channel::IsDeleted) {
@@ -70,7 +70,7 @@ void Poller::update(Channel *ch) {
   }
 }
 
-void Poller::update(Channel *ch, int op) {
+inline void Poller::update(Channel *ch, int op) {
   epoll_event event;
   ::bzero(&event, sizeof event);
   event.data.fd = ch->fd();
@@ -100,7 +100,7 @@ void Poller::update(Channel *ch, int op) {
   }
 }
 
-void Poller::fill(int num, std::vector<Channel *> &list) {
+inline void Poller::fill(int num, std::vector<Channel *> &list) {
   for (size_t i = 0; i < num; ++i) {
     int fd = events_[i].data.fd;
     Channel *ch = static_cast<Channel *>(events_[i].data.ptr);
@@ -109,14 +109,14 @@ void Poller::fill(int num, std::vector<Channel *> &list) {
   }
 }
 
-void Poller::poll(int timeOut, std::vector<Channel *> &list) {
+inline void Poller::poll(int timeOut, std::vector<Channel *> &list) {
   int number = epoll_wait(epollFd_, events_.data(), events_.size(), timeOut);
   if (number > 0) {
     fill(number, list);
   }
 }
 
-void Poller::remove(Channel *ch) {
+inline void Poller::remove(Channel *ch) {
   int fd = ch->fd();
   if (channels_.find(fd) != channels_.end()) {
     channels_.erase(fd);
