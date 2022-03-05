@@ -23,7 +23,7 @@ class AppendFile : pinkx::noncopyable {
   off_t writtenBytes_;
 
   // Not thread safe
-  size_t write(const char* logline, size_t len) {
+  inline size_t write(const char* logline, size_t len) {
     return fwrite(logline, 1, len, file_);
   }
 
@@ -36,20 +36,20 @@ class AppendFile : pinkx::noncopyable {
 
   void flush();
 
-  FILE* file() const { return file_; }
+  inline FILE* file() const { return file_; }
 
-  off_t writtenBytes() const { return writtenBytes_; }
+  inline off_t writtenBytes() const { return writtenBytes_; }
 };
 
-AppendFile::AppendFile(char* filename)
+inline AppendFile::AppendFile(char* filename)
     : file_(fopen(filename, "ae")), writtenBytes_(0) {
   assert(file_);
   setbuffer(file_, buffer_, sizeof buffer_);
 }
 
-AppendFile::~AppendFile() { fclose(file_); }
+inline AppendFile::~AppendFile() { fclose(file_); }
 
-void AppendFile::append(const char* logline, int len) {
+inline void AppendFile::append(const char* logline, int len) {
   size_t written = 0;
 
   while (written != len) {
@@ -68,7 +68,7 @@ void AppendFile::append(const char* logline, int len) {
   writtenBytes_ += written;
 }
 
-void AppendFile::flush() { fflush(file_); }
+inline void AppendFile::flush() { fflush(file_); }
 
 //
 //
@@ -90,11 +90,11 @@ class SyncLogger : pinkx::noncopyable {
 
   static char* LogLevel[6];
 
-  static void init(char* filename) {
+  inline static void init(char* filename) {
     file_ = std::move(std::unique_ptr<AppendFile>(new AppendFile(filename)));
   }
 
-  static void append(int level, int line, const char* format, ...) {
+  inline static void append(int level, int line, const char* format, ...) {
     if (file_) {
       time_t t = time(nullptr);
       FILE* log = file_.get()->file();
