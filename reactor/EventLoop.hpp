@@ -32,9 +32,9 @@ class EventLoop : noncopyable {
   void stop();
 };
 
-EventLoop::EventLoop() : quit_(false), poller_(this), pollTimeMs_(-1) {}
+inline EventLoop::EventLoop() : quit_(false), poller_(this), pollTimeMs_(-1) {}
 
-void EventLoop::loop() {
+inline void EventLoop::loop() {
   while (!quit_) {
     // poll
     activeChannels_.clear();
@@ -45,15 +45,15 @@ void EventLoop::loop() {
   }
 }
 
-void EventLoop::update(Channel& c) { poller_.update(&c); }
+inline void EventLoop::update(Channel& c) { poller_.update(&c); }
 
-void EventLoop::remove(Channel& c) { poller_.remove(&c); }
+inline void EventLoop::remove(Channel& c) { poller_.remove(&c); }
 
-void EventLoop::SetPollTime(int ms) { pollTimeMs_ = ms; }
+inline void EventLoop::SetPollTime(int ms) { pollTimeMs_ = ms; }
 
-int EventLoop::poll_time() const { return pollTimeMs_; }
+inline int EventLoop::poll_time() const { return pollTimeMs_; }
 
-void EventLoop::stop() { quit_ = true; }
+inline void EventLoop::stop() { quit_ = true; }
 
 }  // namespace pinkx
 #endif
