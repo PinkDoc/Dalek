@@ -26,9 +26,9 @@ class HttpHeader {
 
  public:
   // vector value is a pair, and first is name, second is options
-  auto& GetHeads() { return heads_; }
+  inline auto& GetHeads() { return heads_; }
 
-  std::string* GetValueByHead(std::string head) {
+  inline std::string* GetValueByHead(std::string head) {
     for (auto& i : heads_) {
       if (i.first == head) {
         return &i.second;
@@ -38,7 +38,7 @@ class HttpHeader {
   }
 
   // Only set to zero, and no delete
-  void reset() { heads_.clear(); }
+  inline void reset() { heads_.clear(); }
 };
 
 // Example: http://www.jobs.com/check.cgi?item=12731&color=blue&size=large
@@ -46,7 +46,7 @@ class HttpURI {
  public:
   HttpURI() : port(0){};
   // Only set to zero, and no delete
-  void reset() {
+  inline void reset() {
     scheme.clear();
     host.clear();
     path.clear();
@@ -82,9 +82,9 @@ class HttpRequest {
     char* p;
     size_t len;
 
-    BodyBuffer() : p(nullptr), len(0){};
+    inline BodyBuffer() : p(nullptr), len(0){};
 
-    void reset() {
+    inline void reset() {
       p = nullptr;
       len = 0;
     }
@@ -113,7 +113,7 @@ class HttpRequest {
   bool keep_alive_;
 
   // Only set to zero, and no delete
-  void reset() {
+  inline  void reset() {
     uri_.reset();
     head_.reset();
     body_.reset();
@@ -123,7 +123,7 @@ class HttpRequest {
     keep_alive_ = false;
   }
 
-  std::string* GetValueByHead(std::string head) {
+  inline std::string* GetValueByHead(std::string head) {
     return head_.GetValueByHead(head);
   }
 };
@@ -231,12 +231,12 @@ class HttpParser {
   size_t offset;
 
  public:
-  HttpParser()
+  inline HttpParser()
       : parse_state_(RL_BEGIN),
         uri_state_(URI_BEGIN),
         offset(0),
         check_code_(PARSE_REQUEST){};
-  HttpParser(HttpRequest& r)
+  inline HttpParser(HttpRequest& r)
       : parse_state_(RL_BEGIN),
         uri_state_(URI_BEGIN),
         offset(0),
@@ -254,25 +254,25 @@ class HttpParser {
   // Parse head line
   errcode parse_HL();
 
-  void set_request(HttpRequest& r) { request = &r; }
+  inline void set_request(HttpRequest& r) { request = &r; }
 
-  void reset() {
+  inline void reset() {
     parse_state_ = RL_BEGIN;
     uri_state_ = URI_BEGIN;
     check_code_ = PARSE_REQUEST;
     offset = 0;
   }
 
-  size_t GetOffset() const { return offset; }
+  inline size_t GetOffset() const { return offset; }
 
-  parse_state ParseState() const { return parse_state_; }
+  inline parse_state ParseState() const { return parse_state_; }
 
-  parse_state UriState() const { return uri_state_; }
+  inline parse_state UriState() const { return uri_state_; }
 
-  checkcode GetCheckCode() const { return check_code_; }
+  inline checkcode GetCheckCode() const { return check_code_; }
 };
 
-errcode HttpParser::parse_URI(char ch) {
+inline errcode HttpParser::parse_URI(char ch) {
   auto& uri = request->uri_;
   switch (uri_state_) {
     case URI_BEGIN:
@@ -469,7 +469,7 @@ errcode HttpParser::parse_URI(char ch) {
   return URI_OK;
 }
 
-errcode HttpParser::parse_RL() {
+inline errcode HttpParser::parse_RL() {
   char* end = request->packet_ + request->len_;
   char* begin = request->packet_ + offset;
   for (; begin < end; ++begin) {
@@ -732,7 +732,7 @@ errcode HttpParser::parse_RL() {
   return PARSE_AGAIN;
 }
 
-errcode HttpParser::parse_HL() {
+inline errcode HttpParser::parse_HL() {
   char* begin = request->packet_ + offset;
   char* end = request->packet_ + request->len_;
   for (; begin < end; ++begin) {
@@ -848,7 +848,7 @@ done:
   return temp_head_ == nullptr ? PARSE_EMPTY_LINE : PARSE_HEAD_OK;
 }
 
-errcode HttpParser::parse_HTTP() {
+inline errcode HttpParser::parse_HTTP() {
   if (request == nullptr) {
     return ERROR_EMPTY_REQUEST;
   }
