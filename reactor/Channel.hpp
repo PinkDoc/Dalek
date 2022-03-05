@@ -64,10 +64,10 @@ const int Channel::IsNew = 0;
 const int Channel::IsDeleted = -1;
 const int Channel::IsAdded = 1;
 
-Channel::Channel(EventLoop& looper, int fd)
+inline Channel::Channel(EventLoop& looper, int fd)
     : looper_(&looper), fd_(fd), event_(0), revent_(0), happended_(0) {}
 
-void Channel::CallBack() {
+inline void Channel::CallBack() {
   if ((revent_ & (EPOLLHUP | EPOLLRDHUP) && (!revent_ & EPOLLIN))) {
     if (closeCallBack) closeCallBack();
   }
@@ -85,45 +85,45 @@ void Channel::CallBack() {
   }
 }
 
-void Channel::SetReadCallBack(std::function<void()> cb) { readCallBack = cb; }
+inline void Channel::SetReadCallBack(std::function<void()> cb) { readCallBack = cb; }
 
-void Channel::SetWriteCallBack(std::function<void()> cb) { writeCallBack = cb; }
+inline void Channel::SetWriteCallBack(std::function<void()> cb) { writeCallBack = cb; }
 
-void Channel::SetErrorCallBack(std::function<void()> cb) { errorCallBack = cb; }
+inline void Channel::SetErrorCallBack(std::function<void()> cb) { errorCallBack = cb; }
 
-void Channel::SetTimeOutCallBack(std::function<void()> cb) { timeOutCallBack = cb; }
+inline void Channel::SetTimeOutCallBack(std::function<void()> cb) { timeOutCallBack = cb; }
 
-void Channel::EnableRead() { event_ |= (EPOLLIN); }
+inline void Channel::EnableRead() { event_ |= (EPOLLIN); }
 
-void Channel::EnableWrite() { event_ |= EPOLLOUT; }
+inline void Channel::EnableWrite() { event_ |= EPOLLOUT; }
 
-void Channel::DisableRead() { event_ &= ~EPOLLIN; }
+inline void Channel::DisableRead() { event_ &= ~EPOLLIN; }
 
-void Channel::DisableWrite() { event_ &= ~EPOLLOUT; }
+inline void Channel::DisableWrite() { event_ &= ~EPOLLOUT; }
 
-void Channel::SetRevent(int op) {
+inline void Channel::SetRevent(int op) {
   revent_ = 0;
   revent_ |= op;
 }
 
-int Channel::event() const { return event_; }
+inline int Channel::event() const { return event_; }
 
-int Channel::happended() const { return happended_; }
+inline int Channel::happended() const { return happended_; }
 
-void Channel::SetDeleted() {
+inline void Channel::SetDeleted() {
   // Existed in map
   happended_ = Channel::IsDeleted;
 }
 
-void Channel::SetAdded() { happended_ = Channel::IsAdded; }
+inline void Channel::SetAdded() { happended_ = Channel::IsAdded; }
 
-void Channel::TimeOutCallBack() {
+inline void Channel::TimeOutCallBack() {
   if (timeOutCallBack) timeOutCallBack();
 }
 
-void Channel::SetFd(int fd) { fd_ = fd; }
+inline void Channel::SetFd(int fd) { fd_ = fd; }
 
-void Channel::SetEventLooper(EventLoop* looper) { looper_ = looper; }
+inline void Channel::SetEventLooper(EventLoop* looper) { looper_ = looper; }
 
 }  // namespace pinkx
 #endif
