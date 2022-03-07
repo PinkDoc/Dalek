@@ -1,4 +1,4 @@
-<a href="https://travis-ci.org/caozhiyi/CppNet"><img src="https://travis-ci.org/caozhiyi/CppNet.svg?branch=master" alt="Build Status"></a>![Build Status](https://img.shields.io/badge/language-c++-writek.svg)
+<img src="https://travis-ci.org/caozhiyi/CppNet.svg?branch=master" alt="Build Status">
 
 ![dw](dalek.png)
 
