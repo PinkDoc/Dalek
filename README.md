@@ -12,7 +12,7 @@ Dalek跑着我的小站：
 目录下需要 `conf.json`文件
 worker 是 工作进程数量，
 port 则是 工作端口
-conf.json
+root是工作目录
 ```
 {
 "worker" : [number]，
