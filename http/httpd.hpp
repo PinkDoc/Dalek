@@ -51,7 +51,7 @@ class HttpConnection : noncopyable {
   void CloseConnection();
 
  public:
-  HttpConnection(EventLoop& looper, TimerWheel& wheel, int fd)
+  inline HttpConnection(EventLoop& looper, TimerWheel& wheel, int fd)
       : fd_(fd),
         channel_(looper, fd),
         looper_(&looper),
@@ -95,7 +95,7 @@ class HttpConnection : noncopyable {
   void Register();  // Register connect to looper and wheel
 };
 
-void HttpConnection::PollIn() {
+inline void HttpConnection::PollIn() {
   int ret = readBuffer_.readFromFd(fd_);
   if (request_.packet_ != readBuffer_.peek()) {
     // resize
@@ -116,7 +116,7 @@ void HttpConnection::PollIn() {
   }
 }
 
-void HttpConnection::HandleResponse() {
+inline void HttpConnection::HandleResponse() {
   auto method = request_.method_;
   if (request_.version_ != 11) {
     BuildError(VERSION_NOT_SUPPORT);
@@ -210,7 +210,7 @@ void HttpConnection::HandleResponse() {
   looper_->update(channel_);
 }
 
-void HttpConnection::BuildError(rescode code) {
+inline void HttpConnection::BuildError(rescode code) {
   writeBuffer_.sprintf(HTTP_VERSION);
   writeBuffer_.sprintf(const_cast<char*>(resMap[code].data()));
   writeBuffer_.sprintf(CRLF);
@@ -242,7 +242,7 @@ void HttpConnection::BuildError(rescode code) {
   looper_->update(channel_);
 }
 
-void HttpConnection::PollOut() {
+inline void HttpConnection::PollOut() {
   int ret = writeBuffer_.sendToFd(fd_);
   if (writeBuffer_.writeable() != writeBuffer_.capacity()) return;
   SendFile();
@@ -256,14 +256,14 @@ void HttpConnection::PollOut() {
   }
 }
 
-void HttpConnection::CloseConnection() {
+inline void HttpConnection::CloseConnection() {
   looper_->remove(channel_);
   timer_wheel_->del(channel_);
   close(fd_);
   reset();
 }
 
-void HttpConnection::SendFile() {
+inline void HttpConnection::SendFile() {
   if (file_fd_ == -1) return;
   int ret = 0;
   while (true) {
@@ -275,7 +275,7 @@ void HttpConnection::SendFile() {
   // if (ret < 0) CloseConnection();
 }
 
-std::string_view HttpConnection::GetMime() {
+inline std::string_view HttpConnection::GetMime() {
   auto& path = request_.uri_.path;
   size_t dot = path.find_last_of('.');
   if (dot == path.npos) {
@@ -290,7 +290,7 @@ std::string_view HttpConnection::GetMime() {
   return (*ret).second;
 }
 
-void HttpConnection::reset() {
+inline void HttpConnection::reset() {
   request_.reset();
   parser_.reset();
 
@@ -329,7 +329,7 @@ class HttpServer : noncopyable {
 
  public:
   // Default port is 8000
-  HttpServer(EventLoop& looper, TimerWheel& wheel)
+  inline HttpServer(EventLoop& looper, TimerWheel& wheel)
       : looper_(&looper),
         timer_wheel_(&wheel),
         fd_(::socket(AF_INET, SOCK_STREAM, 0)),
@@ -347,7 +347,7 @@ class HttpServer : noncopyable {
     looper_->update(channel_);
   }
 
-  HttpServer(EventLoop& looper, TimerWheel& wheel, net::InetAddress& address)
+  inline HttpServer(EventLoop& looper, TimerWheel& wheel, net::InetAddress& address)
       : looper_(&looper),
         timer_wheel_(&wheel),
         fd_(::socket(AF_INET, SOCK_STREAM, 0)),
@@ -369,7 +369,7 @@ class HttpServer : noncopyable {
     socket_.listen();
   }
 
-  ~HttpServer() {
+  inline ~HttpServer() {
     close(fd_);
     for (auto i : connections_) delete i.second;
   }
@@ -377,7 +377,7 @@ class HttpServer : noncopyable {
   void accept();
 };
 
-void HttpServer::accept() {
+inline void HttpServer::accept() {
   net::InetAddress addr_;
   socklen_t len = sizeof(sockaddr_in);
   int ret = ::accept4(fd_, addr_.GetAddr(), &len, O_NONBLOCK);

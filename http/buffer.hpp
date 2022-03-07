@@ -23,15 +23,15 @@ class Buffer {
  public:
   Buffer();
 
-  void operator= (Buffer && buffer) { buffer_ = std::move(buffer.buffer_); }
+  inline void operator= (Buffer && buffer) { buffer_ = std::move(buffer.buffer_); }
 
-  char* peek() const { return const_cast<char*>(buffer_.data()); }
-  char* writeBegin() const { return peek() + endIndex_; }
-  size_t size() const { return endIndex_; }
-  size_t capacity() const { return buffer_.capacity(); }
-  size_t writeable() { return capacity() - size(); }
+  inline char* peek() const { return const_cast<char*>(buffer_.data()); }
+  inline char* writeBegin() const { return peek() + endIndex_; }
+  inline size_t size() const { return endIndex_; }
+  inline size_t capacity() const { return buffer_.capacity(); }
+  inline size_t writeable() { return capacity() - size(); }
 
-  void reset() {
+  inline void reset() {
     endIndex_ = 0;
     buffer_.clear();
   }
@@ -43,11 +43,11 @@ class Buffer {
   void sprintf(char* format, ...);
 };
 
-Buffer::Buffer() : endIndex_(0), buffer_(1024, 0) {}
+inline Buffer::Buffer() : endIndex_(0), buffer_(1024, 0) {}
 
-void Buffer::resize() { buffer_.resize(capacity() * 2); }
+inline void Buffer::resize() { buffer_.resize(capacity() * 2); }
 
-int Buffer::readFromFd(int fd) {
+inline int Buffer::readFromFd(int fd) {
   if (fd < 0) {
     return -1;
   }
@@ -71,7 +71,7 @@ int Buffer::readFromFd(int fd) {
   return n;
 }
 
-void Buffer::append(char* buf, size_t len) {
+inline void Buffer::append(char* buf, size_t len) {
   if (writeable() < len) {
     resize();
   }
@@ -81,7 +81,7 @@ void Buffer::append(char* buf, size_t len) {
 }
 
 // It is safe
-void Buffer::sprintf(char* format, ...) {
+inline void Buffer::sprintf(char* format, ...) {
   char* begin = buffer_.data();
   va_list args;
   va_start(args, format);
@@ -90,7 +90,7 @@ void Buffer::sprintf(char* format, ...) {
   endIndex_ += offset;
 }
 
-int Buffer::sendToFd(int fd) {
+inline int Buffer::sendToFd(int fd) {
   if (fd == -1) return 1;
   int ret = send(fd, buffer_.data(), endIndex_, 0);
   if (ret > 0) endIndex_ -= ret;

@@ -37,7 +37,7 @@ class Channel {
   void SetErrorCallBack(std::function<void()> cb);
   void SetTimeOutCallBack(std::function<void()> cb);
 
-  int fd() const { return fd_; }
+  inline int fd() const { return fd_; }
 
   static const int IsNew;
   static const int IsDeleted;
