@@ -1,0 +1,3 @@
+/home/pink/桌面/net/Dalek-master/v1/build/CMakeFiles/rebuild_cache.dir
+/home/pink/桌面/net/Dalek-master/v1/build/CMakeFiles/edit_cache.dir
+/home/pink/桌面/net/Dalek-master/v1/build/CMakeFiles/Dalek.dir
