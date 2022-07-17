@@ -13,29 +13,29 @@
 
 namespace core {
 
-class EventLoop;
+class event_loop;
 
-class Poller {
+class poller {
 private:
     int epollFd_;
 
-    std::map<int, Channel *> channels_;
+    std::map<int, event_channel *> channels_;
     std::array<epoll_event, 16384> events_; // 4096 * 4
 
-    EventLoop *looper_;
+    event_loop *looper_;
 
-    void fill(int num, std::vector<Channel *> &list);
-    void update(Channel *ch, int op);
+    void fill(int num, std::vector<event_channel *> &list);
+    int update(event_channel *ch, int op);
 
 public:
-    Poller(EventLoop &looper);
-    ~Poller();
+    poller(event_loop &looper);
+    ~poller();
 
     // Noncopyable
-    Poller(const Poller &) = delete;
-    Poller &operator=(const Poller &) = delete;
+    poller(const poller &) = delete;
+    poller &operator=(const poller &) = delete;
 
-    Poller(Poller &&p) :
+    inline poller(poller &&p) :
         epollFd_(p.epollFd_),
         channels_(std::move(p.channels_)),
         events_(std::move(p.events_)),
@@ -44,7 +44,7 @@ public:
         p.looper_ = nullptr;
     }
 
-    Poller &operator=(Poller &&p) {
+    inline poller &operator=(poller &&p) {
         epollFd_ = p.epollFd_;
         channels_ = std::move(p.channels_);
         events_ = (std::move(p.events_));
@@ -55,38 +55,38 @@ public:
         return *this;
     }
 
-    void poll(int timeOut, std::vector<Channel *> &list);
+    void poll(int timeOut, std::vector<event_channel *> &list);
 
     // Add or update or delete
-    void update(Channel *ch);
-    void remove(Channel *ch);
+    int update(event_channel *ch);
+    void remove(event_channel *ch);
 };
 
-inline Poller::Poller(EventLoop &looper) :
+inline poller::poller(event_loop &looper) :
     looper_(&looper), epollFd_(::epoll_create1(EPOLL_CLOEXEC)) {
     if (epollFd_ == -1) {
         assert(false);
     }
 }
 
-inline Poller::~Poller() {
+inline poller::~poller() {
     ::close(epollFd_);
 }
 
-inline void Poller::update(Channel *ch) {
+inline int poller::update(event_channel *ch) {
     int fd = ch->fd();
-    if (ch->happended() == Channel::IsNew || ch->happended() == Channel::IsDeleted) {
+    if (ch->happended() == event_channel::IsNew || ch->happended() == event_channel::IsDeleted) {
         channels_[fd] = ch;
-        update(ch, EPOLL_CTL_ADD);
+        return update(ch, EPOLL_CTL_ADD);
     } else {
         if (channels_[fd] != ch) {
             assert(false);
         }
-        update(ch, EPOLL_CTL_MOD);
+        return update(ch, EPOLL_CTL_MOD);
     }
 }
 
-inline void Poller::update(Channel *ch, int op) {
+inline int poller::update(event_channel *ch, int op) {
     epoll_event event;
     ::bzero(&event, sizeof event);
     event.data.fd = ch->fd();
@@ -97,7 +97,7 @@ inline void Poller::update(Channel *ch, int op) {
     int ret = epoll_ctl(epollFd_, op, ch->fd(), &event);
 
     if (ret == -1) {
-        return;
+        return -1;
     }
 
     if (op == EPOLL_CTL_MOD) {
@@ -109,25 +109,26 @@ inline void Poller::update(Channel *ch, int op) {
     } else {
         ch->SetAdded();
     }
+    return ret;
 }
 
-inline void Poller::fill(int num, std::vector<Channel *> &list) {
+inline void poller::fill(int num, std::vector<event_channel *> &list) {
     for (size_t i = 0; i < num; ++i) {
         int fd = events_[i].data.fd;
-        Channel *ch = static_cast<Channel *>(events_[i].data.ptr);
+        event_channel *ch = static_cast<event_channel *>(events_[i].data.ptr);
         ch->SetRevent(events_[i].events);
         list.push_back(ch);
     }
 }
 
-inline void Poller::poll(int timeOut, std::vector<Channel *> &list) {
+inline void poller::poll(int timeOut, std::vector<event_channel *> &list) {
     int number = epoll_wait(epollFd_, events_.data(), events_.size(), timeOut);
     if (number > 0) {
         fill(number, list);
     }
 }
 
-inline void Poller::remove(Channel *ch) {
+inline void poller::remove(event_channel *ch) {
     int fd = ch->fd();
     if (channels_.find(fd) != channels_.end()) {
         channels_.erase(fd);
