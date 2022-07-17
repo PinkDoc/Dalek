@@ -1,5 +1,0 @@
-{
-    "editor.formatOnSave" : true,
-    "clang-format.executable" : "/home/pink/configure/clang_format",
-    
-}
